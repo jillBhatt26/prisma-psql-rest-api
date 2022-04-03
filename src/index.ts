@@ -1,6 +1,7 @@
 // module imports
 import express, { Application } from 'express';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 
 // env config
 dotenv.config();
@@ -14,9 +15,12 @@ import { errorHandler } from './middleware';
 // app init and middleware
 const app: Application = express();
 
-// middleware
+// requests parser middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// cookie parser middleware
+app.use(cookieParser());
 
 // app listen
 const PORT: number = parseInt(process.env.PORT!);

@@ -6,12 +6,16 @@ import {
     createPostValidation,
     updatePostValidation,
     validatePostParams
-} from '../../middleware/validation';
+} from '../../middleware';
+
+// auth middleware imports
+import { authMiddleware } from '../../middleware';
 
 // controllers imports
 import {
     fetchPostsMany,
     fetchPostsSingle,
+    fetchPostsByAuthor,
     createPost,
     updatePost,
     deletePost
@@ -23,10 +27,18 @@ const router: Router = Router();
 router.get('/', fetchPostsMany);
 router.get('/:id', validatePostParams, fetchPostsSingle);
 
-router.post('/', createPostValidation, createPost);
+router.get('/user/:id', validatePostParams, fetchPostsByAuthor);
 
-router.put('/:id', validatePostParams, updatePostValidation, updatePost);
+router.post('/', authMiddleware, createPostValidation, createPost);
 
-router.delete('/:id', validatePostParams, deletePost);
+router.put(
+    '/:id',
+    authMiddleware,
+    validatePostParams,
+    updatePostValidation,
+    updatePost
+);
+
+router.delete('/:id', authMiddleware, validatePostParams, deletePost);
 
 export default router;

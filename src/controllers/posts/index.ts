@@ -4,6 +4,9 @@ import { NextFunction, Request, Response } from 'express';
 // prisma client imports
 import { Post, PrismaClient } from '@prisma/client';
 
+// interfaces imports
+import { IAuthRequest } from '../../interfaces';
+
 // Models imports
 const client = new PrismaClient();
 
@@ -44,10 +47,35 @@ const fetchPostsSingle = async (
     }
 };
 
-const createPost = async (req: Request, res: Response, next: NextFunction) => {
+const fetchPostsByAuthor = async (
+    req: IAuthRequest,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const posts: Post[] = await client.post.findMany({
+            where: {
+                authorId: Number(req.params.id)
+            }
+        });
+
+        return res.status(200).json({ posts });
+    } catch (error: any) {
+        return next({ status: 500, message: error.message });
+    }
+};
+
+const createPost = async (
+    req: IAuthRequest,
+    res: Response,
+    next: NextFunction
+) => {
     try {
         const post: Post = await client.post.create({
-            data: req.body
+            data: {
+                ...req.body,
+                authorId: Number(req.user!.id)
+            }
         });
 
         return res.status(201).json({ post });
@@ -56,7 +84,11 @@ const createPost = async (req: Request, res: Response, next: NextFunction) => {
     }
 };
 
-const updatePost = async (req: Request, res: Response, next: NextFunction) => {
+const updatePost = async (
+    req: IAuthRequest,
+    res: Response,
+    next: NextFunction
+) => {
     try {
         const toUpdatePost: Post | null = await client.post.findUnique({
             where: {
@@ -72,7 +104,10 @@ const updatePost = async (req: Request, res: Response, next: NextFunction) => {
             where: {
                 id: Number(req.params.id)
             },
-            data: req.body
+            data: {
+                ...req.body,
+                authorId: Number(req.user!.id)
+            }
         });
 
         return res.status(200).json({ post });
@@ -106,4 +141,11 @@ const deletePost = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 // controllers exports
-export { fetchPostsMany, fetchPostsSingle, createPost, updatePost, deletePost };
+export {
+    fetchPostsMany,
+    fetchPostsSingle,
+    fetchPostsByAuthor,
+    createPost,
+    updatePost,
+    deletePost
+};

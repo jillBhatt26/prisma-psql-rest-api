@@ -1,6 +1,14 @@
 // imports
 import { Router } from 'express';
 
+// validation middleware imports
+import {
+    signupValidation,
+    loginValidation,
+    updateValidation,
+    authMiddleware
+} from '../../middleware';
+
 // controllers imports
 import {
     signUpUser,
@@ -14,16 +22,16 @@ import {
 // router init and routes defs
 const router: Router = Router();
 
-router.post('/signup', signUpUser);
-router.post('/login', loginUser);
+router.post('/signup', signupValidation, signUpUser);
+router.post('/login', loginValidation, loginUser);
 
 router.get('/:id', fetchUser);
 
-router.post('/logout', logoutUser);
+router.post('/logout', authMiddleware, logoutUser);
 
-router.put('/:id', updateUser);
+router.put('/update', authMiddleware, updateValidation, updateUser);
 
-router.delete('/:id', deleteUser);
+router.delete('/delete', authMiddleware, deleteUser);
 
 // exports
 
