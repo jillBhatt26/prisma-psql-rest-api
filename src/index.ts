@@ -1,10 +1,7 @@
 // module imports
 import express, { Application } from 'express';
-import dotenv from 'dotenv';
+import 'dotenv/config';
 import cookieParser from 'cookie-parser';
-
-// env config
-dotenv.config();
 
 // app router imports
 import appRouter from './routes';
