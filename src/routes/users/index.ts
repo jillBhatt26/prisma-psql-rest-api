@@ -10,29 +10,26 @@ import {
 } from '../../middleware';
 
 // controllers imports
-import {
-    signUpUser,
-    loginUser,
-    fetchUser,
-    logoutUser,
-    updateUser,
-    deleteUser
-} from '../../controllers';
+import { AccountControllers } from '../../controllers';
 
 // router init and routes defs
 const router: Router = Router();
 
-router.post('/signup', signupValidation, signUpUser);
-router.post('/login', loginValidation, loginUser);
+router.post('/signup', signupValidation, AccountControllers.signUpUser);
+router.post('/login', loginValidation, AccountControllers.loginUser);
 
-router.get('/:id', fetchUser);
+router.get('/:id', authMiddleware, AccountControllers.fetchUser);
 
-router.post('/logout', authMiddleware, logoutUser);
+router.post('/logout', authMiddleware, AccountControllers.logoutUser);
 
-router.put('/update', authMiddleware, updateValidation, updateUser);
+router.put(
+    '/update',
+    authMiddleware,
+    updateValidation,
+    AccountControllers.updateUser
+);
 
-router.delete('/delete', authMiddleware, deleteUser);
+router.delete('/delete', authMiddleware, AccountControllers.deleteUser);
 
 // exports
-
 export default router;

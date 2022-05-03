@@ -2,7 +2,7 @@
 import * as jwt from 'jsonwebtoken';
 
 // interfaces imports
-import { IUserInfo } from '../../../controllers/users/interfaces';
+import { IUserInfo } from '../../../controllers/account/interfaces';
 
 // util definition
 const verifyToken: Function = async (token: string): Promise<IUserInfo> => {

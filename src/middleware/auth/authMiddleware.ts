@@ -1,11 +1,11 @@
 // imports
-import { Request, Response, NextFunction } from 'express';
-
-// utils imports
-import { verifyToken } from './utils';
+import { Response, NextFunction } from 'express';
 
 // interfaces imports
 import { IAuthRequest } from '../../interfaces';
+
+// services
+import { TokenServices } from '../../services';
 
 // middleware definition
 const authMiddleware = async (
@@ -22,7 +22,7 @@ const authMiddleware = async (
 
     try {
         // verify token
-        const user: IAuthRequest['user'] = await verifyToken(token);
+        const user: IAuthRequest['user'] = TokenServices.verifyToken(token);
 
         // set user to request
         req.user = user;
