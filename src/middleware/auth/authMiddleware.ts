@@ -17,7 +17,7 @@ const authMiddleware = async (
     const token: string | undefined = req.cookies.auth;
 
     if (!token) {
-        return next({ status: 401, message: 'No token provided!' });
+        return next({ status: 401, message: 'Authentication required!' });
     }
 
     try {

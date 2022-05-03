@@ -12,33 +12,44 @@ import {
 import { authMiddleware } from '../../middleware';
 
 // controllers imports
-import {
-    fetchPostsMany,
-    fetchPostsSingle,
-    fetchPostsByAuthor,
-    createPost,
-    updatePost,
-    deletePost
-} from '../../controllers';
+// import {
+//     fetchPostsMany,
+//     fetchPostsSingle,
+//     fetchPostsByAuthor,
+//     createPost,
+//     updatePost,
+//     deletePost
+// } from '../../controllers';
+
+import { PostControllers } from '../../controllers';
 
 // router init and routes defs
 const router: Router = Router();
 
-router.get('/', fetchPostsMany);
-router.get('/:id', validatePostParams, fetchPostsSingle);
+router.get('/:id', validatePostParams, PostControllers.fetchPostSingle);
 
-router.get('/user/:id', validatePostParams, fetchPostsByAuthor);
+router.get('/user/:id', validatePostParams, PostControllers.fetchPostsByAuthor);
 
-router.post('/', authMiddleware, createPostValidation, createPost);
+router.post(
+    '/',
+    authMiddleware,
+    createPostValidation,
+    PostControllers.createPost
+);
 
 router.put(
     '/:id',
     authMiddleware,
     validatePostParams,
     updatePostValidation,
-    updatePost
+    PostControllers.updatePost
 );
 
-router.delete('/:id', authMiddleware, validatePostParams, deletePost);
+router.delete(
+    '/:id',
+    authMiddleware,
+    validatePostParams,
+    PostControllers.deletePost
+);
 
 export default router;
