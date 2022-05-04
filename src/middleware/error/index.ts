@@ -1,17 +1,29 @@
 // express imports
 import { ErrorRequestHandler, Request, Response, NextFunction } from 'express';
-import { IError } from './interfaces';
+import { ErrorHandler, IClientError, IErrorHandlerJSON } from '../../utils';
+import 'dotenv/config';
 
-// middleware definition
 const errorHandler: ErrorRequestHandler = async (
-    error: IError,
-    req: Request,
+    err: ErrorHandler,
+    _: Request,
     res: Response,
-    next: NextFunction
+    __: NextFunction
 ) => {
-    return res
-        .status(error.status)
-        .json({ success: false, message: error.message });
+    const errorHandler: ErrorHandler = new ErrorHandler(
+        err.failurePoint,
+        err.message,
+        err.clientMsg,
+        err.status
+    );
+
+    if (process.env.NODE_ENV!.toLowerCase() === 'development') {
+        const error: IErrorHandlerJSON = errorHandler.toJSON();
+        return res.status(error.status).json({ error });
+    }
+
+    const error: IClientError = errorHandler.toClientError();
+
+    return res.status(error.status).json({ error });
 };
 
 export { errorHandler };

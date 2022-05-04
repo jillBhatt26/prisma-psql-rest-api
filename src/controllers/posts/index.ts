@@ -10,6 +10,9 @@ import { IAuthRequest } from '../../interfaces';
 // services imports
 import { ICreatePostData, postsService } from '../../services';
 
+// utils imports
+import { ErrorHandler } from '../../utils';
+
 // controllers class
 class PostControllers {
     public async fetchPostsByAuthor(
@@ -24,7 +27,18 @@ class PostControllers {
 
             return res.status(200).json({ posts });
         } catch (error: any) {
-            return next({ status: error.code || 500, message: error.message });
+            if (error instanceof ErrorHandler) {
+                return next(error);
+            }
+
+            const err: ErrorHandler = new ErrorHandler(
+                'POSTS_CONTROLLERS.FETCH_POSTS_BY_AUTHOR',
+                error.message,
+                error.clientMsg || 'An error occurred while fetching posts',
+                error.code
+            );
+
+            return next(err);
         }
     }
 
@@ -42,7 +56,18 @@ class PostControllers {
                 post
             });
         } catch (error: any) {
-            return next({ status: error.code || 500, message: error.message });
+            if (error instanceof ErrorHandler) {
+                return next(error);
+            }
+
+            const err: ErrorHandler = new ErrorHandler(
+                'POSTS_CONTROLLERS.FETCH_POST_SINGLE',
+                error.message,
+                error.clientMsg || 'An error occurred while fetching post',
+                error.code
+            );
+
+            return next(err);
         }
     }
 
@@ -64,7 +89,18 @@ class PostControllers {
 
             return res.status(201).json({ post });
         } catch (error: any) {
-            return next({ status: error.code || 500, message: error.message });
+            if (error instanceof ErrorHandler) {
+                return next(error);
+            }
+
+            const err: ErrorHandler = new ErrorHandler(
+                'POSTS_CONTROLLERS.CREATE_POST',
+                error.message,
+                error.clientMsg || 'An error occurred while creating post',
+                error.code
+            );
+
+            return next(err);
         }
     }
 
@@ -89,7 +125,18 @@ class PostControllers {
 
             return res.status(200).json({ post });
         } catch (error: any) {
-            return next({ status: error.code || 500, message: error.message });
+            if (error instanceof ErrorHandler) {
+                return next(error);
+            }
+
+            const err: ErrorHandler = new ErrorHandler(
+                'POSTS_CONTROLLERS.UPDATE_POST',
+                error.message,
+                error.clientMsg || 'An error occurred while updating post',
+                error.code
+            );
+
+            return next(err);
         }
     }
 
@@ -105,7 +152,18 @@ class PostControllers {
 
             return res.status(200).json({ success });
         } catch (error: any) {
-            return next({ status: error.code || 500, message: error.message });
+            if (error instanceof ErrorHandler) {
+                return next(error);
+            }
+
+            const err: ErrorHandler = new ErrorHandler(
+                'POSTS_CONTROLLERS.DELETE_POST',
+                error.message,
+                error.clientMsg || 'An error occurred while deleting post',
+                error.code
+            );
+
+            return next(err);
         }
     }
 }

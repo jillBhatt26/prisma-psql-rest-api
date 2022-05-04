@@ -1,8 +1,11 @@
 // imports
 import { Post, Prisma, PrismaClient } from '@prisma/client';
+import { ErrorHandler } from '../../../utils';
 
 // interfaces
-import { ICreatePostData } from '../interfaces';
+import { ICreatePostData, IUpdatePostData } from '../interfaces';
+
+// utils
 
 // services class definition
 class PostsService {
@@ -22,7 +25,14 @@ class PostsService {
 
             return posts;
         } catch (error: any) {
-            throw new Error(error.message || "Failed to fetch author's posts");
+            const err: ErrorHandler = new ErrorHandler(
+                'POSTS_CONTROLLERS.FETCH_POSTS_AUTHOR',
+                error.message,
+                error.clientMsg || 'An error occurred while fetching post',
+                error.code
+            );
+
+            throw err;
         }
     }
 
@@ -35,12 +45,33 @@ class PostsService {
             });
 
             if (!post) {
-                throw new Error('Post not found');
+                const err: ErrorHandler = new ErrorHandler(
+                    'POSTS_CONTROLLERS.FETCH_POSTS_SINGLE',
+                    'Post not found',
+                    'Post not found',
+                    404
+                );
+
+                throw err;
             }
 
             return post;
         } catch (error: any) {
-            throw new Error(error.message);
+            if (error instanceof ErrorHandler) {
+                throw new ErrorHandler(
+                    error.failurePoint,
+                    error.message,
+                    error.clientMsg,
+                    error.status
+                );
+            }
+
+            throw new ErrorHandler(
+                'POSTS_CONTROLLERS.FETCH_POSTS_SINGLE',
+                error.message,
+                'An error occurred while fetching post',
+                500
+            );
         }
     }
 
@@ -52,43 +83,68 @@ class PostsService {
 
             return post;
         } catch (error: any) {
-            throw new Error(error.message || 'Failed to create post');
+            if (error instanceof ErrorHandler) {
+                throw new ErrorHandler(
+                    error.failurePoint,
+                    error.message,
+                    error.clientMsg,
+                    error.status
+                );
+            }
+
+            throw new ErrorHandler(
+                'POSTS_CONTROLLERS.CREATE_POST',
+                error.message,
+                'An error occurred while creating the post',
+                500
+            );
         }
     }
 
     public async updatePost(
         postID: number,
-        updatePostData: Partial<Post>
+        updatePostData: IUpdatePostData
     ): Promise<Post> {
         try {
-            const post: Post | null = await this.client.post.update({
+            await this.getPostSingle(postID);
+
+            // TODO: update the post
+            const updatedPost: Post = await this.client.post.update({
                 where: {
                     id: postID
                 },
                 data: updatePostData
             });
 
-            if (!post) {
-                throw new Error('Post not found');
+            return updatedPost;
+        } catch (error: any) {
+            if (error instanceof ErrorHandler) {
+                throw new ErrorHandler(
+                    error.failurePoint,
+                    error.message,
+                    error.clientMsg,
+                    error.status
+                );
             }
 
-            return post;
-        } catch (error: any) {
-            throw new Error(error.message || 'Failed to create post');
+            throw new ErrorHandler(
+                'POSTS_CONTROLLERS.CREATE_POST',
+                error.message,
+                'An error occurred while creating the post',
+                500
+            );
         }
     }
 
     public async deletePost(postID: number): Promise<boolean> {
         try {
-            const post: Post | null = await this.client.post.delete({
+            await this.getPostSingle(postID);
+
+            await this.client.post.delete({
                 where: {
                     id: postID
                 }
             });
-
-            if (!post) {
-                throw new Error('Post not found');
-            }
 
             return true;
         } catch (error: any) {

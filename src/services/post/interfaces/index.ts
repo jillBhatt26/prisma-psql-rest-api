@@ -3,3 +3,8 @@ export interface ICreatePostData {
     content: string;
     authorId: number;
 }
+
+export interface IUpdatePostData {
+    title?: string;
+    content?: string;
+}
