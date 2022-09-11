@@ -1,7 +1,8 @@
 // module imports
-import express, { Application } from 'express';
+import express, { Application, Response } from 'express';
 import 'dotenv/config';
 import cookieParser from 'cookie-parser';
+import os from 'os';
 
 // app router imports
 import appRouter from './routes';
@@ -22,6 +23,10 @@ app.use(cookieParser());
 // app listen
 const PORT: number = parseInt(process.env.PORT!);
 const HOST: string = process.env.HOST!;
+
+app.get('/api', (_, res: Response) => {
+    return res.status(200).json({ host: os.hostname() });
+});
 
 app.listen(PORT, HOST, () => {
     console.log(`Backend live on URL: http://${HOST}:${PORT}`);

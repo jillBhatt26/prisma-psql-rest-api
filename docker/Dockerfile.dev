@@ -7,16 +7,12 @@ WORKDIR /app
 COPY ./package.json ./
 COPY ./yarn.lock ./
 COPY ./tsconfig.json ./
+COPY ./prisma ./prisma
 
 RUN yarn install --immutable --immutable-cache --check-cache
 
 COPY ./ ./
 
-ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.9.0/wait /wait
-RUN chmod +x /wait
-
-RUN /wait && npx prisma db push
-
 EXPOSE 5001
 
-CMD ["/wait", "&&", "yarn", "run", "start:dev" ]
+CMD ["yarn", "run", "start:dev" ]
