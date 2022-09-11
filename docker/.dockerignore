@@ -1,0 +1,9 @@
+**/node_modules
+**/docker
+**/.git
+**/.github
+**/.gitignore
+# **/.vscode
+**/README.md
+# **/tsconfig.json
+**/example.env

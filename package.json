@@ -4,12 +4,16 @@
     "main": "./dist/index.js",
     "license": "MIT",
     "scripts": {
-        "start:pro": "dotenv -e env_pro.env node ./dist/index.js",
-        "start:dev": "dotenv -e env_dev.env nodemon ./src/index.ts",
-        "db:push": "npx dotenv -e env_dev.env prisma db push",
-        "studio:dev": "npx dotenv -e env_dev.env prisma studio",
-        "migrate:dev": "npx dotenv -e env_dev.env prisma migrate dev",
-        "build": "tsc -p ./"
+        "start:pro": "node ./dist/index.js",
+        "start:dev": "nodemon -L ./src/index.ts",
+        "db:push": "npx prisma db push",
+        "studio:dev": "npx prisma studio",
+        "migrate:dev": "npx prisma migrate dev",
+        "build": "tsc -p ./",
+        "compose:up:dev": "docker-compose -f ./docker/docker-compose.dev.yaml up --build --scale server=3",
+        "compose:up:pro": "GITHUB_SHA=$(git rev-parse --short HEAD) docker-compose -f ./docker/docker-compose.prod.yaml up --build -d --scale server=3",
+        "compose:down:dev": "docker-compose -f ./docker/docker-compose.dev.yaml down --rmi all -v --remove-orphans",
+        "compose:down:prod": "docker-compose -f ./docker/docker-compose.prod.yaml down --rmi all -v --remove-orphans"
     },
     "dependencies": {
         "@prisma/client": "^3.11.1",
@@ -17,7 +21,8 @@
         "cookie-parser": "^1.4.6",
         "express": "^4.17.3",
         "joi": "^17.6.0",
-        "jsonwebtoken": "^8.5.1"
+        "jsonwebtoken": "^8.5.1",
+        "prisma": "^4.3.1"
     },
     "devDependencies": {
         "@types/cookie-parser": "^1.4.2",
@@ -27,7 +32,6 @@
         "dotenv": "^16.0.0",
         "dotenv-cli": "^5.1.0",
         "nodemon": "^2.0.15",
-        "prisma": "^3.11.1",
         "ts-node": "^10.7.0",
         "typescript": "^4.6.3"
     }
