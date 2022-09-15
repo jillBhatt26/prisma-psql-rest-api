@@ -15,10 +15,11 @@ import { AccountControllers } from '../../controllers';
 // router init and routes defs
 const router: Router = Router();
 
-router.post('/signup', signupValidation, AccountControllers.signUpUser);
-router.post('/login', loginValidation, AccountControllers.loginUser);
+router.get('/', authMiddleware, AccountControllers.fetchUser);
 
-router.get('/:id', authMiddleware, AccountControllers.fetchUser);
+router.post('/signup', signupValidation, AccountControllers.signUpUser);
+
+router.post('/login', loginValidation, AccountControllers.loginUser);
 
 router.post('/logout', authMiddleware, AccountControllers.logoutUser);
 
