@@ -1,0 +1,21 @@
+FROM node:16.16.0-alpine
+
+RUN yarn global add nodemon
+
+WORKDIR /app
+
+COPY ./package.json ./
+COPY ./yarn.lock ./
+
+COPY ./.env ./
+COPY ./tsconfig.json ./
+
+RUN yarn install --immutable --immutable-cache --check-cache
+
+COPY ./ ./
+
+RUN npx prisma generate
+
+EXPOSE 5001
+
+ENTRYPOINT [ "sh", "./cmd/entrypoint-dev.sh" ]
