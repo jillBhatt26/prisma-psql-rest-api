@@ -10,9 +10,9 @@
         "studio:dev": "npx prisma studio",
         "migrate:dev": "npx prisma migrate dev",
         "build": "tsc -p ./",
-        "compose:up:dev": "docker-compose -f ./docker/docker-compose.dev.yaml up --build",
-        "compose:down:dev": "docker-compose -f ./docker/docker-compose.dev.yaml down --rmi all --remove-orphans",
-        "compose:down:dev:full": "docker-compose -f ./docker/docker-compose.dev.yaml down --rmi all -v --remove-orphans"
+        "compose:up:dev": "docker-compose --env-file ./.env -f ./docker/docker-compose.dev.yaml up --build",
+        "compose:down:dev": "docker-compose --env-file ./.env -f ./docker/docker-compose.dev.yaml down --rmi all --remove-orphans",
+        "compose:down:dev:full": "docker-compose --env-file ./.env -f ./docker/docker-compose.dev.yaml down --rmi all -v --remove-orphans"
     },
     "dependencies": {
         "@prisma/client": "^3.11.1",
