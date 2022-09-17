@@ -32,8 +32,11 @@ app.get('/api', (_, res: Response) => {
 // });
 
 app.listen(PORT, () => {
-    console.log(`Backend live on PORT: ${PORT}`);
+    console.log(`🚀....Backend live on PORT: ${PORT}....🚀`);
 });
+// app.listen(PORT, () => {
+//     console.log(`Backend live on PORT: ${PORT}`);
+// });
 
 // app routes middleware
 app.use(appRouter);

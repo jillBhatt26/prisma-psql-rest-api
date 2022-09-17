@@ -1,2 +1,2 @@
 yarn run db:push;
-yarn run start:dev
+yarn run serve:dev
