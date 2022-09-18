@@ -27,8 +27,6 @@ COPY ./yarn.lock ./
 
 RUN yarn install --immutable --immutable-cache --check-cache --production=true
 
-RUN npx prisma generate
-
 COPY --from=development /app/dist ./dist
 COPY --from=development /app/prisma ./prisma
 COPY --from=development /app/cmd ./cmd
