@@ -56,7 +56,7 @@ services:
             - pgadmin-data:/var/lib/pgadmin
 
     nginx:
-        image: nginx:alpine
+        image: nginx:stable-alpine
         volumes:
             - ./nginx/conf.d:/etc/nginx/conf.d
         command: nginx -g "daemon off;"
