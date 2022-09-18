@@ -60,8 +60,8 @@ services:
         volumes:
             - ./nginx/conf.d:/etc/nginx/conf.d
         command: nginx -g "daemon off;"
-        depends_on:
-            - server
+        # depends_on:
+        #     - server
         ports:
             - 5001:80
 
