@@ -29,10 +29,8 @@ RUN yarn install --immutable --immutable-cache --check-cache --production=true
 
 COPY --from=development /app/dist ./dist
 COPY --from=development /app/prisma ./prisma
-# COPY --from=development /app/cmd ./cmd
+COPY --from=development /app/cmd ./cmd
 
 EXPOSE 5001
 
-# ENTRYPOINT [ "sh", "./cmd/entrypoint-prod.sh" ]
-
-CMD [ "npx", "prisma", "migrate", "deploy", ";", "node", "./dist/index.js" ]
+ENTRYPOINT [ "sh", "./cmd/entrypoint-prod.sh" ]
