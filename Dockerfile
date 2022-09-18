@@ -35,4 +35,4 @@ EXPOSE 5001
 
 # ENTRYPOINT [ "sh", "./cmd/entrypoint-prod.sh" ]
 
-CMD [ "npx", "prisma", "generate", ";", "npx", "prisma", "migrate", "deploy", ";", "node", "./dist/index.js" ]
+CMD [ "npx", "prisma", "migrate", "deploy", ";", "node", "./dist/index.js" ]
