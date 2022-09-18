@@ -1,18 +1,18 @@
-# FROM node:16.16.0-alpine as development
+FROM node:16.16.0-alpine as development
 
-# WORKDIR /app
+WORKDIR /app
 
-# COPY ./package.json ./
-# COPY ./yarn.lock ./
+COPY ./package.json ./
+COPY ./yarn.lock ./
 
-# # RUN npm ci
-# RUN yarn install --immutable --immutable-cache --check-cache
+# RUN npm ci
+RUN yarn install --immutable --immutable-cache --check-cache
 
-# COPY ./ ./
+COPY ./ ./
 
-# RUN npx prisma generate
+RUN npx prisma generate
 
-# RUN npm run build
+RUN npm run build
 
 
 FROM node:16.16.0-alpine as production
@@ -29,13 +29,9 @@ RUN yarn install --immutable --immutable-cache --check-cache --production=true
 
 RUN npx prisma generate
 
-# COPY --from=development /app/dist ./dist
-# COPY --from=development /app/prisma ./prisma
-# COPY --from=development /app/cmd ./cmd
-
-COPY ./dist ./dist
-COPY ./prisma ./prisma
-COPY ./cmd ./cmd
+COPY --from=development /app/dist ./dist
+COPY --from=development /app/prisma ./prisma
+COPY --from=development /app/cmd ./cmd
 
 EXPOSE 5001
 
