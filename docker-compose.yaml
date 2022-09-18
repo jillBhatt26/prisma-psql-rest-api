@@ -32,13 +32,13 @@ services:
         depends_on:
             - postgres
         volumes:
-            - ../:/app
-            - /app/node_modules
             - ./nginx/conf.d:/etc/nginx/conf.d
+        #     - ../:/app
+        #     - /app/node_modules
         env_file:
             - ./.env
-        ports:
-            - ${HOST_SERVER_PORT}:5001
+        # ports:
+        #     - ${HOST_SERVER_PORT}:5001
         links:
             - postgres
 
@@ -55,15 +55,15 @@ services:
         volumes:
             - pgadmin-data:/var/lib/pgadmin
 
-    # nginx:
-    #     image: nginx:stable-alpine
-    #     volumes:
-    #         - ./nginx/conf.d:/etc/nginx/conf.d
-    #     command: nginx -g "daemon off;"
-    #     depends_on:
-    #         - server
-    #     ports:
-    #         - 5001:80
+    nginx:
+        image: nginx:alpine
+        volumes:
+            - ./nginx/conf.d:/etc/nginx/conf.d
+        command: nginx -g "daemon off;"
+        depends_on:
+            - server
+        ports:
+            - 5001:80
 
 volumes:
     pg-data:

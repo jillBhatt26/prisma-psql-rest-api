@@ -33,4 +33,4 @@ COPY --from=development /app/cmd ./cmd
 
 EXPOSE 5001
 
-ENTRYPOINT [ "sh", "./cmd/entrypoint-prod.sh" ]
+CMD [ "sh", "./cmd/entrypoint-prod.sh" ]
