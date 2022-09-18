@@ -39,8 +39,8 @@ services:
             - ./.env
         # ports:
         #     - ${HOST_SERVER_PORT}:5001
-        # links:
-        #     - postgres
+        links:
+            - postgres
 
     pgadmin:
         image: dpage/pgadmin4
