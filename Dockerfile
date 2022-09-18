@@ -22,7 +22,7 @@ ENV NODE_ENV=${NODE_ENV}
 
 WORKDIR /app
 
-COPY ./package*.json ./
+COPY ./package.json ./
 COPY ./yarn.lock ./
 
 RUN yarn install --immutable --immutable-cache --check-cache --production=true
@@ -31,6 +31,6 @@ COPY --from=development /app/dist ./dist
 COPY --from=development /app/prisma ./prisma
 COPY --from=development /app/cmd ./cmd
 
-# EXPOSE 5001
+EXPOSE 5001
 
 ENTRYPOINT [ "sh", "./cmd/entrypoint-prod.sh" ]
