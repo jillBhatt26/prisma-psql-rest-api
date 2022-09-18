@@ -1,9 +1,8 @@
 node_modules
 docker
-#!**/docker/.dockerignore
 .git
 .github
 .gitignore
-**/.vscode
-**/README.md
+.vscode
+README.md
 example.env
