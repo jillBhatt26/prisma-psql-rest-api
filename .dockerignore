@@ -6,5 +6,5 @@ docker
 .gitignore
 **/.vscode
 **/README.md
-tsconfig.json
+# tsconfig.json
 example.env
