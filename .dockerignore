@@ -1,10 +1,10 @@
-**/node_modules
-**/docker/*
-!**/docker/.dockerignore
-**/.git
-**/.github
-**/.gitignore
-# **/.vscode
+node_modules
+docker
+# !**/docker/.dockerignore
+.git
+.github
+.gitignore
+**/.vscode
 **/README.md
-# **/tsconfig.json
-**/example.env
+tsconfig.json
+example.env
