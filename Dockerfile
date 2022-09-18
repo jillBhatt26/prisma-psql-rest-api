@@ -31,7 +31,6 @@ COPY --from=development /app/dist ./dist
 COPY --from=development /app/prisma ./prisma
 COPY --from=development /app/cmd ./cmd
 
-EXPOSE 5001
+# EXPOSE 5001
 
-# CMD [ "node", "./dist/index.js" ]
 CMD [ "sh", "./cmd/entrypoint-prod.sh" ]
