@@ -1,0 +1,79 @@
+name: Production
+
+on:
+    push:
+        branches: ['main']
+    pull_request:
+        branches: ['main']
+
+jobs:
+    build:
+        runs-on: self-hosted
+
+        strategy:
+            matrix:
+                node-version: [16.x]
+
+        environment: production
+
+        env:
+            DATABASE_URL: ${{ secrets.DATABASE_URL }}
+            HOST_PG_ADMIN_PORT: ${{ secrets.HOST_PG_ADMIN_PORT }}
+            HOST_PG_PORT: ${{ secrets.HOST_PG_PORT }}
+            HOST_SERVER_PORT: ${{ secrets.HOST_SERVER_PORT }}
+            JWT_SECRET: ${{ secrets.JWT_SECRET }}
+            NODE_ENV: ${{ secrets.NODE_ENV }}
+            PGADMIN_DEFAULT_EMAIL: ${{ secrets.PGADMIN_DEFAULT_EMAIL }}
+            PGADMIN_DEFAULT_PASSWORD: ${{ secrets.PGADMIN_DEFAULT_PASSWORD }}
+            PORT: ${{ secrets.PORT }}
+            POSTGRES_DATA: ${{ secrets.POSTGRES_DATA }}
+            POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+            POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+            POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v3
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: 'yarn'
+
+            # - name: Install dependencies
+            #   run: yarn install --immutable --immutable-cache --check-cache
+
+            - name: Run the tests if provided
+              run: npm run test --if-present
+
+            # - name: Generate build
+            #   run: npm run build --if-present
+
+            - name: Generate env file
+              run: |
+                  touch .env
+
+                  echo DATABASE_URL = ${{ env.DATABASE_URL }} >> .env
+                  echo HOST_PG_ADMIN_PORT = ${{ env.HOST_PG_ADMIN_PORT }} >> .env
+                  echo HOST_PG_PORT = ${{ env.HOST_PG_PORT }} >> .env
+                  echo HOST_SERVER_PORT = ${{ env.HOST_SERVER_PORT }} >> .env
+                  echo JWT_SECRET = ${{ env.JWT_SECRET }} >> .env
+                  echo NODE_ENV = ${{ env.NODE_ENV }} >> .env
+                  echo PGADMIN_DEFAULT_EMAIL = ${{ env.PGADMIN_DEFAULT_EMAIL }} >> .env
+                  echo PGADMIN_DEFAULT_PASSWORD = ${{ env.PGADMIN_DEFAULT_PASSWORD }} >> .env
+                  echo PORT = ${{ env.PORT }} >> .env
+                  echo POSTGRES_DATA = ${{ env.POSTGRES_DATA }} >> .env
+                  echo POSTGRES_DB = ${{ env.POSTGRES_DB }} >> .env
+                  echo POSTGRES_PASSWORD = ${{ env.POSTGRES_PASSWORD }} >> .env
+                  echo POSTGRES_USER = ${{ env.POSTGRES_USER }} >> .env
+
+                  cat .env
+
+            - name: Build the production server image and start the container
+              run: npm run compose:up:prod
+
+            - name: Remove all images that is not being used by any running container
+              run: docker image prune -a -f
+
+            - name: Remove none tagged images
+              run: if [ ! -z "$(docker images --filter dangling=true -a -q --no-trunc)" ]; then docker rmi $(docker images --filter dangling=true -a -q --no-trunc) -f; else echo "No <none> images found"; fi

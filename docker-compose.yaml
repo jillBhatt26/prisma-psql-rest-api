@@ -54,6 +54,16 @@ services:
         volumes:
             - pgadmin-data:/var/lib/pgadmin
 
+    nginx:
+        image: nginx:alpine
+        volumes:
+            - ./nginx/conf.d:/etc/nginx/conf.d
+        command: nginx -g "daemon off;"
+        depends_on:
+            - server
+        ports:
+            - 5001:80
+
 volumes:
     pg-data:
     pgadmin-data:
