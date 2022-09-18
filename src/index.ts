@@ -39,7 +39,7 @@ app.listen(PORT, () => {
 // });
 
 // app routes middleware
-app.use(appRouter);
+app.use('/api', appRouter);
 
 // error handler middleware
 app.use(errorHandler);
