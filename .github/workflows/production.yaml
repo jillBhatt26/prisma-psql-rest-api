@@ -43,7 +43,7 @@ jobs:
                   cache: 'yarn'
 
             # - name: Install dependencies
-            #   run: yarn install --immutable --immutable-cache --check-cache
+            #   run: yarn install --immutable   --immutable-cache --check-cache
 
             # - name: Run the tests if provided
             #   run: npm run test --if-present
