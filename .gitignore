@@ -3,3 +3,4 @@ node_modules
 env_dev.env
 env_pro.env
 dist
+data
