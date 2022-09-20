@@ -21,7 +21,7 @@ services:
         ports:
             - ${HOST_PG_PORT}:5432
         volumes:
-            - ./data/pg-data:/var/lib/postgresql/data
+            - pg-data:/var/lib/postgresql/data
 
     server:
         build:
@@ -53,7 +53,7 @@ services:
             PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
             PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
         volumes:
-            - ./data/pgadmin-data:/var/lib/pgadmin
+            - pgadmin-data:/var/lib/pgadmin
 
     nginx:
         image: nginx:alpine
