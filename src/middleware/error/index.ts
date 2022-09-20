@@ -21,6 +21,11 @@ const errorHandler: ErrorRequestHandler = async (
         return res.status(error.status).json({ error });
     }
 
+    if (process.env.NODE_ENV!.toLowerCase() === 'production') {
+        const error: IErrorHandlerJSON = errorHandler.toJSON();
+        return res.status(error.status).json({ error });
+    }
+
     const error: IClientError = errorHandler.toClientError();
 
     return res.status(error.status).json({ error });
