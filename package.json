@@ -16,7 +16,8 @@
         "compose:up:prod": "GITHUB_SHA=$(git rev-parse --short HEAD) docker-compose up --build -d --scale server=3",
         "compose:down:prod": "docker-compose down --rmi all --remove-orphans",
         "compose:down:prod:full": "docker-compose down --rmi all -v --remove-orphans",
-        "build:do": "yarn install --immutable --immutable-cache --check-cache && yarn build && ls && yarn install --immutable --immutable-cache --check-cache --production=true",
+        "prisma:do:migrate": "npx prisma generate && npx prisma migrate deploy",
+        "build:do": "yarn install --immutable --immutable-cache --check-cache && yarn build && ls && yarn install --immutable --immutable-cache --check-cache --production=true && prisma:do:migrate",
         "run:do": "yarn serve:pro"
     },
     "dependencies": {
