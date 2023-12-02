@@ -17,7 +17,7 @@
         "compose:down:prod": "docker-compose down --rmi all --remove-orphans",
         "compose:down:prod:full": "docker-compose down --rmi all -v --remove-orphans",
         "prisma:do:migrate": "npx prisma generate && npx prisma migrate deploy",
-        "build:do": "yarn prisma:do:migrate && yarn install --immutable --immutable-cache --check-cache && yarn build && ls && yarn install --immutable --immutable-cache --check-cache --production=true ",
+        "build:do": "yarn install --immutable --immutable-cache --check-cache && yarn prisma:do:migrate && yarn build && ls && yarn install --immutable --immutable-cache --check-cache --production=true ",
         "run:do": "yarn serve:pro"
     },
     "dependencies": {
